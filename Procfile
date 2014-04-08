@@ -1,1 +1,1 @@
-python webm.py
+web: python webm.py $PATH
