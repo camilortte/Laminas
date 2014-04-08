@@ -1,1 +1,1 @@
-web: python webm.py $PATH
+web: python webm.py $PORT $PATH
