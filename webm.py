@@ -112,7 +112,7 @@ class index:
 	    <h1>Error Lo que Ingresaste no es valido</h1>
 	  </body>
 	  </html>
-	  """+e
+	  """+str(e)
 		return  web.seeother("/static/outs.pdf")
 	
 if __name__ == '__main__':
