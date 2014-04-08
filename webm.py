@@ -1,8 +1,7 @@
 import web
 import lxml.html
 from lxml.cssselect import CSSSelector
-import pdfkit
-
+from pywkher import generate_pdf
 
 PAGINA='http://www.laneros.com/mis-laminas/365521/'
 
@@ -53,67 +52,72 @@ def getPDF(user):
 
 	css="<style> .TENGO {background-color:green;} .REPETIDO {background-color:red;} .NONE {background-color:white;} table{margin:auto;border:0.5em}</style>\n"
 	#print css+tableText
-	return pdfkit.from_string(css+tableText+"<br> <h1>Created by @camilortte</h1>", 'static/outs.pdf')
+	#return pdfkit.from_string(css+tableText+"<br> <h1>Created by @camilortte</h1>", 'static/outs.pdf')
+	print tableText
+	s=css+tableText+"<br> <h1>Created by @camilortte :D</h1>"
+	return generate_pdf(html=s)
 	#pdfkit.from_url('http://google.com', 'out.pdf')
 
 urls = (
-'/', 'index'
-)
+	'/', 'index'
+	)
 
 app = web.application(urls, globals())
 
 class index:
 	def GET(self):
-	  return """
-	  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
-	  <head>
-	  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	      <title>Generador PDF Laminitas</title>
-	      <style type="text/css" media="screen">
-	        h1 {text-align:center; color: #444;}
-	        form {text-align:center; color: #444; margin:auto}
-	        .inp {width:50%}
-	      </style>
-	  </head>
-	  <body>
-	    <h1>Ingresa el link de la pagina: <br>Ejemplo: http://www.laneros.com/mis-laminas/365521/</h1>
-	    <form name='form' method="post">
-			<input class='inp' type="input" name='user'/>
-			<input type="submit"/>
-	    </form>
-	  </body>
-	  </html>
-	  """
+		return """
+		<!DOCTYPE html>
+		<html lang="es">
+		<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Generador PDF Laminitas</title>
+		<style type="text/css" media="screen">
+		h1 {text-align:center; color: #444;}
+		form {text-align:center; color: #444; margin:auto}
+		.inp {width:50%}
+		</style>
+		</head>
+		<body>
+		<h1>Ingresa el link de la pagina: <br>Ejemplo: http://www.laneros.com/mis-laminas/365521/</h1>
+		<form name='form' method="post">
+		<input class='inp' type="input" name='user'/>
+		<input type="submit"/>
+		</form>
+		</body>
+		</html>
+		"""
 
 	def POST(self):
+		filea=""
 		try:
 			form =  web.input()      			      	
-			getPDF(form.user)
+			filea=getPDF(form.user)
 		except  Exception,e:
 			return """
-	  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-	  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
-	  <head>
-	  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	      <title>Generador PDF Laminitas</title>
-	      <style type="text/css" media="screen">
-	        h1 {text-align:center: color: #444;}
-	        form {text-align:center; color: #444; margin:auto}
-	        .inp {width:50%}
-	      </style>
-	  </head>
-	  <body>
-	    <h1>Ingresa el link de la pagina; <br>Ejemplo: http://www.laneros.com/mis-laminas/365521/</h1>
-	    <form name='form' method="post">
+			<!DOCTYPE html>
+			<html lang="es">
+			<head>
+			<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			<title>Generador PDF Laminitas</title>
+			<style type="text/css" media="screen">
+			h1 {text-align:center; color: #444;}
+			form {text-align:center; color: #444; margin:auto}
+			.inp {width:50%}
+			</style>
+			</head>
+			<body>
+			<h1>Ingresa el link de la pagina; <br>Ejemplo: http://www.laneros.com/mis-laminas/365521/</h1>
+			<form name='form' method="post">
 			<input class='inp' type="input" name='user'/>
 			<input type="submit"/>
-	    </form>
-	    <h1>Error Lo que Ingresaste no es valido</h1>
-	  </body>
-	  </html>
-	  """+str(e)
-		return  web.seeother("/static/outs.pdf")
-	
+			</form>
+			<h1>Error Lo que Ingresaste no es valido</h1>
+			</body>
+			</html>
+			"""
+		return filea
+
+
 if __name__ == '__main__':
 	app.run()
