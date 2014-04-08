@@ -90,7 +90,7 @@ class index:
 		try:
 			form =  web.input()      			      	
 			getPDF(form.user)
-		except  Exception:
+		except  Exception,e:
 			return """
 	  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
@@ -112,7 +112,7 @@ class index:
 	    <h1>Error Lo que Ingresaste no es valido</h1>
 	  </body>
 	  </html>
-	  """
+	  """+e
 		return  web.seeother("/static/outs.pdf")
 	
 if __name__ == '__main__':
